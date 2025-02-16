@@ -2,7 +2,7 @@ name: Auto Update YouTube Videos
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Exécute toutes les heures
+    - cron: "0 * * * *"  # Exécute chaque heure
   workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
