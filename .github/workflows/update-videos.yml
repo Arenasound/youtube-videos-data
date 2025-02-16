@@ -28,7 +28,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase  # ✅ Ajout d'un pull avant le push pour éviter les conflits
+          git pull --rebase --autostash  # ✅ Ajoute cette ligne pour éviter le conflit
           git add videos.json
           git commit -m "🔄 Mise à jour automatique des vidéos YouTube" || exit 0
           git push
