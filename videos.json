@@ -1,3 +1,16 @@
 {
-  "videos": []
+  "videos": [
+     {
+        "id": "VIDEO_ID_1",
+        "title": "Titre de la vidéo 1",
+        "thumbnail": "URL_DE_LA_MINIATURE",
+        "link": "https://ton-site.com/video/VIDEO_ID_1"
+     },
+     {
+        "id": "VIDEO_ID_2",
+        "title": "Titre de la vidéo 2",
+        "thumbnail": "URL_DE_LA_MINIATURE",
+        "link": "https://ton-site.com/video/VIDEO_ID_2"
+     }
+  ]
 }
