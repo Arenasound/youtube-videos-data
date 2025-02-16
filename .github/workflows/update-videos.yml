@@ -31,3 +31,32 @@ jobs:
           git add videos.json
           git commit -m "🔄 Mise à jour automatique des vidéos YouTube" || exit 0
           git push
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install node-fetch@2
+
+      - name: Run update script
+        run: node updateVideos.js
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add videos.json
+          git commit -m "🔄 Mise à jour automatique des vidéos YouTube" || exit 0
+          git push
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "❌ Échec de la mise à jour de videos.json" && exit 1
