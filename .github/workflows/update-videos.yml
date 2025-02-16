@@ -2,8 +2,8 @@ name: Auto Update YouTube Videos
 
 on:
   schedule:
-    - cron: "0 * * * *"  # S'exécute toutes les heures
-  workflow_dispatch:  # Permet de lancer l'action manuellement aussi
+    - cron: "0 * * * *"  # Exécute toutes les heures
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
   update-json:
@@ -11,29 +11,28 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4  # ✅ Mise à jour de v3 à v4 pour plus de stabilité
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4  # ✅ Mise à jour de v3 à v4
+        uses: actions/setup-node@v3
         with:
           node-version: "18"
 
       - name: Install dependencies
-        run: npm install
+        run: npm install node-fetch@2
 
       - name: Run update script
         run: node updateVideos.js
 
       - name: Commit and Push changes
-  env:
-    GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  run: |
-    git config --global user.name "github-actions[bot]"
-    git config --global user.email "github-actions[bot]@users.noreply.github.com"
-    git add videos.json
-    git commit -m "🔄 Mise à jour automatique des vidéos YouTube" || exit 0
-    git push https://x-access-token:${GH_TOKEN}@github.com/Arenasound/youtube-videos-data.git main
-
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add videos.json
+          git commit -m "🔄 Mise à jour automatique des vidéos YouTube" || exit 0
+          git push https://x-access-token:${GH_TOKEN}@github.com/Arenasound/youtube-videos-data.git main
 
       - name: Notify on failure
         if: failure()
