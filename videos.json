@@ -1,16 +1,40 @@
 {
   "videos": [
-     {
-        "id": "VIDEO_ID_1",
-        "title": "Titre de la vidéo 1",
-        "thumbnail": "URL_DE_LA_MINIATURE",
-        "link": "https://ton-site.com/video/VIDEO_ID_1"
-     },
-     {
-        "id": "VIDEO_ID_2",
-        "title": "Titre de la vidéo 2",
-        "thumbnail": "URL_DE_LA_MINIATURE",
-        "link": "https://ton-site.com/video/VIDEO_ID_2"
-     }
+    {
+      "id": "gxViQKxlCHs",
+      "title": "HIRMA - ARENA Live set : Brussels",
+      "thumbnail": "https://i.ytimg.com/vi/gxViQKxlCHs/hqdefault.jpg",
+      "link": "https://www.arenasound.tv/video/gxViQKxlCHs"
+    },
+    {
+      "id": "gkfxRgRuc34",
+      "title": "EKANY - ARENA Live set : Brussels",
+      "thumbnail": "https://i.ytimg.com/vi/gkfxRgRuc34/hqdefault.jpg",
+      "link": "https://www.arenasound.tv/video/gkfxRgRuc34"
+    },
+    {
+      "id": "HSB3KHKJDYw",
+      "title": "CHAMOS - ARENA Live set : Brussels",
+      "thumbnail": "https://i.ytimg.com/vi/HSB3KHKJDYw/hqdefault.jpg",
+      "link": "https://www.arenasound.tv/video/HSB3KHKJDYw"
+    },
+    {
+      "id": "znTXm5s3U9U",
+      "title": "SHIFA LIGERO - ARENA Live set : Brussels",
+      "thumbnail": "https://i.ytimg.com/vi/znTXm5s3U9U/hqdefault.jpg",
+      "link": "https://www.arenasound.tv/video/znTXm5s3U9U"
+    },
+    {
+      "id": "K-m3cbM5hMs",
+      "title": "LAMSI - ARENA Live set : Brussels",
+      "thumbnail": "https://i.ytimg.com/vi/K-m3cbM5hMs/hqdefault.jpg",
+      "link": "https://www.arenasound.tv/video/K-m3cbM5hMs"
+    },
+    {
+      "id": "93RgnFLVhpE",
+      "title": "DANGA - ARENA Live set : Brussels",
+      "thumbnail": "https://i.ytimg.com/vi/93RgnFLVhpE/hqdefault.jpg",
+      "link": "https://www.arenasound.tv/video/93RgnFLVhpE"
+    }
   ]
 }
