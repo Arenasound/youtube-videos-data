@@ -1,39 +1,32 @@
-name: Auto Update YouTube Videos
+name: Update YouTube Videos Data
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Exécute toutes les heures
-  workflow_dispatch:  # Permet de déclencher l’action manuellement
+    - cron: '0 * * * *'  # Exécution automatique toutes les heures
+  workflow_dispatch:  # Permet d'exécuter manuellement
 
 jobs:
-  update-json:
+  update-data:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: npm install node-fetch@2
-
-      - name: Run update script
-        run: node updateVideos.js
-
-      - name: Commit and Push changes
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+      - name: Set up Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add videos.json
-          git commit -m "🔄 Mise à jour automatique des vidéos YouTube" || exit 0
-          git push https://x-access-token:${GH_PAT}@github.com/Arenasound/youtube-videos-data.git main
 
-      - name: Notify on failure
-        if: failure()
-        run: echo "❌ Échec de la mise à jour de videos.json" && exit 1
+      - name: Fetch latest YouTube videos
+        run: |
+          python fetch_videos.py  # Remplace par ton script de récupération des vidéos
+
+      - name: Commit and Push changes
+        env:
+          GH_PAT2: ${{ secrets.GH_PAT2 }}
+        run: |
+          git add videos.json
+          git commit -m "🚀 Mise à jour automatique des vidéos YouTube" || echo "Aucun changement à commit"
+          git remote set-url origin https://x-access-token:${GH_PAT2}@github.com/Arenasound/youtube-videos-data.git
+          git push origin main || echo "Aucun changement à pousser"
