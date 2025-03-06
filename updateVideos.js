@@ -6,6 +6,7 @@ const CHANNEL_ID = "UCH52AxYg8ZIJimd_vXDsZyQ";  // 🔥 ID de la chaîne Arena S
 const MAX_RESULTS = 50;  // Nombre max de vidéos par requête
 const API_URL = "https://www.googleapis.com/youtube/v3/search";
 const COMMENT_API_URL = "https://www.googleapis.com/youtube/v3/commentThreads";
+const VIDEO_STATS_URL = "https://www.googleapis.com/youtube/v3/videos";
 
 // Fonction pour récupérer les commentaires d'une vidéo
 async function fetchComments(videoId) {
@@ -13,6 +14,18 @@ async function fetchComments(videoId) {
     const response = await fetch(url);
     const data = await response.json();
     return data.items.map(item => item.snippet.topLevelComment.snippet.textDisplay);  // Récupérer les commentaires
+}
+
+// Fonction pour récupérer les statistiques de la vidéo (y compris les likes)
+async function fetchVideoStats(videoId) {
+    const url = `${VIDEO_STATS_URL}?part=statistics&id=${videoId}&key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const videoStats = data.items[0]?.statistics;
+    return videoStats ? {
+        likes: videoStats.likeCount,
+        views: videoStats.viewCount,
+    } : { likes: 0, views: 0 };
 }
 
 // Fonction pour récupérer toutes les vidéos
@@ -34,12 +47,15 @@ async function fetchAllVideos() {
                     !item.snippet.description?.toLowerCase().includes("shorts")
                 ).map(async (item) => {
                     const comments = await fetchComments(item.id.videoId);  // Récupérer les commentaires
+                    const stats = await fetchVideoStats(item.id.videoId);  // Récupérer les statistiques (likes)
                     return {
                         id: item.id.videoId,
                         title: item.snippet.title,
                         thumbnail: item.snippet.thumbnails.high.url,
                         description: item.snippet.description,  // Ajouter la description
                         comments: comments,  // Ajouter les commentaires
+                        likes: stats.likes,  // Ajouter le nombre de likes
+                        views: stats.views,  // Ajouter le nombre de vues
                         publishedAt: item.snippet.publishedAt
                     };
                 });
