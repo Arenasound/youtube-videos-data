@@ -5,7 +5,17 @@ const API_KEY = "AIzaSyCBWF3nogzvkfVL5Ujj7dHBFUju6lG5glg";  // 🔥 Clé API de 
 const CHANNEL_ID = "UCH52AxYg8ZIJimd_vXDsZyQ";  // 🔥 ID de la chaîne Arena Sound
 const MAX_RESULTS = 50;  // Nombre max de vidéos par requête
 const API_URL = "https://www.googleapis.com/youtube/v3/search";
+const COMMENT_API_URL = "https://www.googleapis.com/youtube/v3/commentThreads";
 
+// Fonction pour récupérer les commentaires d'une vidéo
+async function fetchComments(videoId) {
+    const url = `${COMMENT_API_URL}?part=snippet&videoId=${videoId}&maxResults=100&key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.items.map(item => item.snippet.topLevelComment.snippet.textDisplay);  // Récupérer les commentaires
+}
+
+// Fonction pour récupérer toutes les vidéos
 async function fetchAllVideos() {
     let videos = [];
     let nextPageToken = '';
@@ -22,17 +32,23 @@ async function fetchAllVideos() {
                 const filteredVideos = data.items.filter(item => 
                     !item.snippet.title.toLowerCase().includes("shorts") &&
                     !item.snippet.description?.toLowerCase().includes("shorts")
-                ).map(item => ({
-                    id: item.id.videoId,
-                    title: item.snippet.title,
-                    thumbnail: item.snippet.thumbnails.high.url,
-                    publishedAt: item.snippet.publishedAt
-                }));
+                ).map(async (item) => {
+                    const comments = await fetchComments(item.id.videoId);  // Récupérer les commentaires
+                    return {
+                        id: item.id.videoId,
+                        title: item.snippet.title,
+                        thumbnail: item.snippet.thumbnails.high.url,
+                        description: item.snippet.description,  // Ajouter la description
+                        comments: comments,  // Ajouter les commentaires
+                        publishedAt: item.snippet.publishedAt
+                    };
+                });
 
-                videos = videos.concat(filteredVideos);
+                // Résoudre toutes les promesses d'asynchrone dans filteredVideos
+                const resolvedVideos = await Promise.all(filteredVideos);
+                videos = videos.concat(resolvedVideos);
             }
 
-            // Vérifier s'il y a une page suivante
             nextPageToken = data.nextPageToken || '';
         } while (nextPageToken);  // 🔄 Boucle jusqu'à ce qu'il n'y ait plus de vidéos
 
@@ -46,4 +62,3 @@ async function fetchAllVideos() {
 
 // Lancer la récupération des vidéos
 fetchAllVideos();
-
