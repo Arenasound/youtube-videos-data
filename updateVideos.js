@@ -42,22 +42,20 @@ async function fetchAllVideos() {
 
             if (data.items) {
                 // 📌 Filtrer les Shorts en excluant les vidéos dont le titre ou la description contient "Shorts"
-                const filteredVideos = data.items.filter(item => 
-                    !item.snippet.title.toLowerCase().includes("shorts") &&
-                    !item.snippet.description?.toLowerCase().includes("shorts")
-                ).map(async (item) => {
-                    const comments = await fetchComments(item.id.videoId);  // Récupérer les commentaires
-                    const stats = await fetchVideoStats(item.id.videoId);  // Récupérer les statistiques (likes)
-                    return {
-                        id: item.id.videoId,
-                        title: item.snippet.title,
-                        thumbnail: item.snippet.thumbnails.high.url,
-                        description: item.snippet.description,  // Ajouter la description
-                        comments: comments,  // Ajouter les commentaires
-                        likes: stats.likes,  // Ajouter le nombre de likes
-                        views: stats.views,  // Ajouter le nombre de vues
-                        publishedAt: item.snippet.publishedAt
-                    };
+                const filteredVideos = data.items.map((item) => {
+                    return fetchComments(item.id.videoId)
+                        .then(comments => fetchVideoStats(item.id.videoId)
+                            .then(stats => ({
+                                id: item.id.videoId,
+                                title: item.snippet.title,
+                                thumbnail: item.snippet.thumbnails.high.url,
+                                description: item.snippet.description,  // Ajouter la description
+                                comments: comments,  // Ajouter les commentaires
+                                likes: stats.likes,  // Ajouter le nombre de likes
+                                views: stats.views,  // Ajouter le nombre de vues
+                                publishedAt: item.snippet.publishedAt
+                            }))
+                        )
                 });
 
                 // Résoudre toutes les promesses d'asynchrone dans filteredVideos
